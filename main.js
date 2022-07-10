@@ -138,6 +138,8 @@ if (typeof describe === 'function') {
     });
   });
 // my tests
+// Everything else is already tested for, so I wasn't sure what tests to make.
+// I ended up creating a test for the function I added to count moves.
 describe('#moveCounter()', () => {
   it('should detect the total number of moves taken', () => {
     stacks = {
