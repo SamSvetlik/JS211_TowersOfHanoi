@@ -21,8 +21,10 @@ let stacks = {
   b: [],
   c: []
 };
+let move = 0;
 
 // Start here. What is this function doing?
+  // This function prints the current state of the towers
 const printStacks = () => {
   console.log("a: " + stacks.a);
   console.log("b: " + stacks.b);
@@ -30,6 +32,10 @@ const printStacks = () => {
 }
 
 // Next, what do you think this function should do?
+  // This function should move a piece from one stack to another.
+  // The prompt showed no inputs, but I can't see a way to make it work without them.
+  // Since the value of each key is an array, the last element (top stone)
+  // can be removed with the pop() method, and added to another with push()
 const movePiece = (startStack, endStack) => {
   // Your code here
   let popped = stacks[startStack].pop();
@@ -37,6 +43,9 @@ const movePiece = (startStack, endStack) => {
 }
 
 // Before you move, should you check if the move it actually allowed? Should 3 be able to be stacked on 2
+  // Again, this function looks like it needs 2 inputs to be able to work.
+  // We can get the value of the final number with the .length property (minus 1)
+  // Since the array values are numbers, we can use the > operator
 const isLegal = (startStack, endStack) => {
   // Your code here
   let startLast = stacks[startStack].length - 1
@@ -48,8 +57,15 @@ const isLegal = (startStack, endStack) => {
   else {return true}
 
 }
-
+//   Here's a function I added to count the number of moves 
+const moveCounter = () => {
+  move++
+  console.log("Number of moves taken: " + move)
+}
 // What is a win in Towers of Hanoi? When should this function run?
+  // I originally tried checking if stacks = [4, 3, 2, 1] in B or C, but
+  // this didn't work. Then I realized that if isLegal() is working,
+  // there will only be 4 items in B or C if the player has won.
 const checkForWin = () => {
   if (stacks['b'].length === 4 || stacks['c'].length === 4) {
     console.log("Congratulations! You win!");
@@ -60,12 +76,16 @@ const checkForWin = () => {
 
 
 // When is this function called? What should it do with its argument?
+  // This function needs to run the other functions, with startStack and 
+  // endStack as inputs. It must see if the move is legal, execute the move,
+  // then check for a win.
 const towersOfHanoi = (startStack, endStack) => {
   // Your code here
 
   if (isLegal(startStack, endStack)) {
-  movePiece(startStack, endStack)
-  checkForWin()
+    movePiece(startStack, endStack)
+    moveCounter()
+    checkForWin()
   }
 }
 
@@ -82,6 +102,7 @@ const getPrompt = () => {
 // Tests
 
 if (typeof describe === 'function') {
+
 
   describe('#towersOfHanoi()', () => {
     it('should be able to move a block', () => {
@@ -116,7 +137,21 @@ if (typeof describe === 'function') {
       assert.equal(checkForWin(), false);
     });
   });
-
+// my tests
+describe('#moveCounter()', () => {
+  it('should detect the total number of moves taken', () => {
+    stacks = {
+      a: [4, 3, 2, 1],
+      b: [],
+      c: []
+    };
+    move = 0;
+    towersOfHanoi('a', 'b');
+    towersOfHanoi('a', 'c');
+    towersOfHanoi('b', 'c');
+    assert.equal(move, 3);
+  });
+});
 } else {
 
   getPrompt();
