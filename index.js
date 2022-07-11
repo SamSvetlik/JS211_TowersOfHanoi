@@ -7,35 +7,73 @@
 // * Why are you get a warning in your console? Fix it.
 // * Delete these comment lines!
 
-const stone = null
+let stone = null
+let move = 0
 
-// this function is called when a row is clicked. 
-// Open your inspector tool to see what is being captured and can be used.
 const selectRow = (row) => {
   const currentRow = row.getAttribute("data-row")
-  
   console.log("Yay, we clicked an item", row)
-  console.log("Here is the stone's id: ", row.id)
-  console.log("Here is the stone's data-size: ", currentRow)
+  console.log("Here are the stones on this row: ", row.children)
 
-  pickUpStone(row.id)
-} 
+  if (stone === null) {
+    pickUpStone(row.id)
+    }
+  else {dropStone(row.id)
+    checkForWin()
+    }
+  }
 
-// this function can be called to get the last stone in the stack
-// but there might be something wrong with it...
 const pickUpStone = (rowID) => {
   const selectedRow = document.getElementById(rowID);
-  stone = selectedRow.removeChild(selectedRow.lastChild);
-  console.log(stone)
+  if (selectedRow.lastElementChild === null) {
+    console.log("This row has no stones to pick up.")
+  }
+  else {
+    stone = selectedRow.removeChild(selectedRow.lastElementChild);
+    console.log("There is a stone in your hand: " + stone.id)
+    const highTone = new Audio('highTone.mp3');
+    highTone.play();
+  }
 }
 
-// You could use this function to drop the stone but you'll need to toggle between pickUpStone & dropStone
-// Once you figure that out you'll need to figure out if its a legal move...
-// Something like: if(!stone){pickupStone} else{dropStone}
+const dropStone = (rowID, rock) => {
+  console.log(rowID)
+  rock = stone
+  // Somehow stone becomes undefined if it is a function parameter.
+  console.log(stone)
+  let target = document.getElementById(rowID)
+  if (target.children.length === 0) {
+    target.appendChild(stone)
+    stone = null
+    const lowTone = new Audio('lowTone.mp3')
+    lowTone.play()
+    moveCounter()
+  }
+  else if (stone.id > target.lastElementChild.id) {
+  console.log("That is an illegal move.")
+  }
+  else {
+    target.appendChild(stone)
+    stone = null
+    const lowTone = new Audio('lowTone.mp3')
+    lowTone.play()
+    moveCounter()
+  }
+}
 
-const dropStone = (rowID, stone) => {
-  document.getElementById(rowID).appendChild(stone)
-  stone = null
+const checkForWin = () => {
+  let top = document.getElementById("top-row")
+  let mid = document.getElementById("middle-row")
+  if (top.children.length === 4 || mid.children.length === 4) {
+    const winner = new Audio('winner.mp3');
+    winner.play();
+    alert("Congratulations! You win!")
+  }
+}
+const moveCounter = () => {
+  move++
+  console.log("Number of moves taken: " + move)
+  document.getElementById("moveContainer").innerText = "Total moves: " + move
 }
 
 // * Remember you can use your logic from 'main.js' to maintain the rules of the game. But how? Follow the flow of data just like falling dominoes.

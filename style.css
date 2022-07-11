@@ -39,24 +39,34 @@
 [data-color="blue"] {
   height: 33px;
   background-color: blue;
+  border:  1px solid black;
 }
 
 [data-color="green"] {
-  height: 33px;
+  height: 44px;
   background-color: green;
+  border:  1px solid black;
 }
 
 [data-color="red"] {
-  height: 33px;
+  height: 55px;
   background-color: red;
+  border:  1px solid black;
 }
 
 [data-color="yellow"] {
-  height: 33px;
+  height: 66px;
   background-color: yellow;
+  border:  1px solid black;
 }
 
 #announce-game-won {
   font-size: 50px;
   text-align: center;
+}
+.container {
+  transform: rotate(-90deg);
+}
+.row {
+  width: 50%
 }
